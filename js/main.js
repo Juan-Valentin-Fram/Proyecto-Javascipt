@@ -44,7 +44,7 @@ let edad = parseInt (prompt("Ingrese su edad:"));
 
 if (trabajo.toLowerCase() === "si" && edad >= 18) {
     console.log("Puede utilizar la calculadora de gastos para su fin personal.");
-} else (trabajo.toLowerCase() === "no" && edad < 18) {
+} else (trabajo.toLowerCase() === "no" && edad < 18); {
     console.log("No puede utilizar la calculadora de gastos.");
 }
 
