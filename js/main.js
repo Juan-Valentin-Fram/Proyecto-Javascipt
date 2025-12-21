@@ -27,24 +27,41 @@
 
 // proyecto final
 
+function saludo() {
+    alert("Gracias por usar la calculadora de gastos!");
+}
+
+saludo();
+
 let nombreproyecto = "Calculadora de gastos";
-let objetivo = prompt ("Describa el objetivo de su uso");
+let objetivo = prompt("Describa el objetivo de su uso");
 let tecnologias = ["HTML", "CSS", "JavaScript"];
 let escompleto = true;
 
-let numberA = parseInt (prompt("Ingrese un numero para sumar:"));
-let numberB = parseInt (prompt("Ingrese un numero para sumar:"));
+let numberA = parseInt(prompt("Ingrese un numero para sumar:"));
+let numberB = parseInt(prompt("Ingrese un numero para sumar:"));
 let resultado = numberA + numberB;
 console.log("El resultado de la suma es: " + resultado);
 
 console.log("Proyecto: " + nombreproyecto + "\nObjetivo: " + objetivo + "\nTecnologias: " + tecnologias + "\nCompletado: " + escompleto);
 
 let trabajo = prompt("¿Es para un fin personal? (si/no)");
-let edad = parseInt (prompt("Ingrese su edad:"));
+let edad = parseInt(prompt("Ingrese su edad:"));
 
 if (trabajo.toLowerCase() === "si" && edad >= 18) {
     console.log("Puede utilizar la calculadora de gastos para su fin personal.");
-} else (trabajo.toLowerCase() === "no" && edad < 18); {
+} else {
     console.log("No puede utilizar la calculadora de gastos.");
 }
 
+function despedida() {
+    alert("¡Hasta luego!");
+}
+
+despedida();
+
+const sumar = (a, b) => {
+    return a + b;
+}
+
+console.log("El resultado de la suma es: " + sumar(15, 25));
