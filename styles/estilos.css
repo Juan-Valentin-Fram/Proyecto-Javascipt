@@ -1,0 +1,55 @@
+/* CSS Compilado para la Entrega */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+}
+
+.titulo {
+    background-color: #34495e;
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+.contenedor {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.formulario-gasto input, .formulario-gasto select {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.contenedor_boton {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.item-gasto {
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.resumen-final {
+    margin-top: 20px;
+    padding: 15px;
+    background: #ecf0f1;
+    border-radius: 5px;
+}

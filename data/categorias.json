@@ -1,0 +1,7 @@
+[
+    { "id": 1, "nombre": "Comida" },
+    { "id": 2, "nombre": "Servicios" },
+    { "id": 3, "nombre": "Ocio" },
+    { "id": 4, "nombre": "Educación" },
+    { "id": 5, "nombre": "Otros" }
+]

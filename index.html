@@ -1,24 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Gastos</title>
-    <script defer src="./js/main.js"></script>
+    <title>Calculadora de Gastos - Proyecto Final</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="./styles/estilos.css">
+    <script defer src="./js/main.js"></script>
 </head>
 <body>
-    <h1 class="titulo">Calculadora de Gastos</h1>
-    <div class="contenedor">
-        <label for="ingreso" class="contenedor_ingreso">Ingreso Mensual:</label>
-        <input type="number" id="ingreso" placeholder="Ingrese su ingreso mensual">
-        
-        <label for="gasto" class="contenedor_gasto">Gasto:</label>
-        <input type="number" id="gasto1" placeholder="Ingrese el primer gasto">
-        
-        <button id="boton" class="contenedor_boton">Ingresar</button>
-        
-        <div id="resultado"></div>
-<body>
+    <header>
+        <h1 class="titulo">Calculadora de Gastos</h1>
+    </header>
+
+    <main class="contenedor">
+        <section class="configuracion">
+            <label for="ingreso">Tu Ingreso Mensual:</label>
+            <input type="number" id="ingreso" placeholder="Ej: 50000">
+        </section>
+
+        <section class="formulario-gasto">
+            <h3>Registrar Nuevo Gasto</h3>
+            <input type="text" id="nombreGasto" placeholder="Descripción (ej: Alquiler)">
+            <input type="number" id="montoGasto" placeholder="Monto $">
+            
+            <label for="categoriaGasto">Categoría:</label>
+            <select id="categoriaGasto">
+                </select>
+
+            <button id="botonGuardar" class="contenedor_boton">Agregar Gasto</button>
+        </section>
+
+        <section class="visualizacion">
+            <h3>Lista de Gastos</h3>
+            <div id="listaGastos"></div>
+            
+            <div id="resultado" class="resumen-final">
+                </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 </html>

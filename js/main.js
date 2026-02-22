@@ -1,173 +1,135 @@
-// VARIABLE: ESPACIO RESERVADO PARA GUARDAR INFORMACION 
+/**
+ * PROYECTO FINAL: CALCULADORA DE GASTOS
+ * Objetivo: Simulador interactivo de finanzas personales 
+ * Aplicando conceptos de Objetos, DOM, Storage, H.O.S y Fetch.
+ */
 
-// DECLARACION:
-// let cliente;
-
-// ASIGNACION DE VARIABLES:
-// cliente = "Carlos";
-// console.log(cliente);
-
-// number = 30;
-// console.log(number);
-
-// String = "Hola Mundo";
-// console.log(String);    
-
-// Boolean = true;
-// console.log(Boolean);
-
-// INICIALIZACION DE VARIABLES:
-// let edad = 30;
-// console.log(edad);
-
-// CONSTANTES: (const) es una variable cuyo valor no puede cambiar
-// const nacimiento = 1995;
-// console.log(nacimiento);
-
-// Validacion de Usuarios
-// const usuarios = [
-//     { nombre: "Ana", edad: 20, aceptoTerminos: false },
-//     { nombre: "Luis", edad: 15, aceptoTerminos: true },
-//     { nombre: "Carlos", edad: 30, aceptoTerminos: true },
-//     { nombre: "Maria", edad: 17, aceptoTerminos: true }
-// ]
-
-// for (let i = 0; i < usuarios.length; i++) {
-//     if (usuarios[i].edad >= 18 && usuarios[i].aceptoTerminos) {
-//         console.log("Usuario válido: " + usuarios[i].nombre);
-//     }
-// }
-
-// // Ciclos por repeticion
-// for (let i = 0; i < 5; i++) {
-//     console.log("El valor de i es: " + i);
-// }
-
-// // Ciclos condicionales
-// const password = "1234";
-// let passwordIngresada = prompt("Ingrese su contraseña:");
-
-// while (passwordIngresada != password) {
-//     passwordIngresada = prompt("Contraseña incorrecta. Ingrese su contraseña nuevamente:");
-// }
-
-// // proyecto final
-// function saludo() {
-//     alert("Gracias por usar la calculadora de gastos!");
-// }
-
-// saludo();
-
-// let nombreproyecto = "Calculadora de gastos";
-// let objetivo = prompt("Describa el objetivo de su uso");
-// let tecnologias = ["HTML", "CSS", "JavaScript"];
-// let escompleto = true;
-
-// let numberA = parseInt(prompt("Ingrese un numero para sumar:"));
-// let numberB = parseInt(prompt("Ingrese un numero para sumar:"));
-// let resultado = numberA + numberB;
-// console.log("El resultado de la suma es: " + resultado);
-
-// // let numberA = parseInt (prompt("Ingrese un numero para sumar:"));
-// // let numberB = parseInt (prompt("Ingrese un numero para sumar:"));
-// // let resultado = numberA + numberB;
-// // console.log("El resultado de la suma es: " + resultado);
-
-// console.log("Proyecto: " + nombreproyecto + "\nObjetivo: " + objetivo + "\nTecnologias: " + tecnologias + "\nCompletado: " + escompleto);
-
-// let trabajo = prompt("¿Es para un fin personal? (si/no)");
-// let edad = parseInt(prompt("Ingrese su edad:"));
-
-// if (trabajo.toLowerCase() === "si" && edad >= 18) {
-//     console.log("Puede utilizar la calculadora de gastos para su fin personal.");
-// } else {
-//     console.log("No puede utilizar la calculadora de gastos.");
-// }
-
-// function despedida() {
-//     alert("¡Hasta luego!");
-// }
-
-// despedida();
-
-// const sumar = (a, b) => {
-//     return a + b;
-// }
-
-// console.log("El resultado de la suma es: " + sumar(15, 25));
-
-
-// proyecto:
-
-// Usuario registrados:
-const usuariosRegistrados = [
-    { nombre: "Ana", edad: 20, plan: "Premium" },
-    { nombre: "Luis", edad: 25, plan: "Básico" },
-    { nombre: "Carlos", edad: 30, plan: "Premium" }
-];
-
-//Funciones: 
-
-function saludarUsuario(nombre) {
-    alert("¡Bienvenido/a a la Calculadora de Gastos, " + nombre + "!");
-}
-
-function calcularGastos(cantidad) {
-    let total = 0;
-
-    for (let i = 1; i <= cantidad; i++) {
-        let entrada = prompt("Ingrese el monto del gasto N°" + i + ":");
-        if (entrada != "" && entrada > 0) {
-            total = total + parseFloat(entrada);
-            console.log("Gasto registrado: $" + entrada);
-        } else {
-            alert("Monto no válido. Se saltará este registro.");
-        }
-    }
-
-    return total;
-}
-
-function evaluarPresupuesto(limite, totalConsumido) {
-    if (totalConsumido > limite) {
-        alert("¡Atención! Has excedido tu presupuesto por $" + (totalConsumido - limite));
-    } else {
-        alert("¡Bien hecho! Estás dentro de tu presupuesto. Te quedan $" + (limite - totalConsumido));
+// CLASES Y ABSTRACCIÓN 
+// Definimos el modelo de datos para representar un gasto individual.
+class Gasto {
+    constructor(id, nombre, precio, categoria) {
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = parseFloat(precio);
+        this.categoria = categoria;
     }
 }
 
-// Inicio del programa:
-let nombreIngresado = prompt("Ingrese su nombre para comenzar:"); {
-    if (usuariosRegistrados) {
-        console.log(`Usuario: ${usuariosRegistrados.nombre} - Plan: ${usuariosRegistrados.plan}`);
+// ESTADO Y PERSISTENCIA (Storage + JSON)
+// Recuperamos datos previos del localStorage o inicializamos un array vacío.
+// Usamos JSON.parse para convertir el string almacenado nuevamente en objeto JS.
+let gastos = JSON.parse(localStorage.getItem("misGastos")) || [];
 
-        saludarUsuario(nombreIngresado);
+// Referencias al DOM para interacción [cite: 533]
+const selectCategorias = document.querySelector("#categoriaGasto");
+const btnGuardar = document.querySelector("#botonGuardar");
+const contenedorLista = document.querySelector("#listaGastos");
 
-        // Validacion de edad:
-        let edadUsuario = parseInt(prompt("Ingrese su edad:"));
-
-        if (edadUsuario >= 18) {
-            console.log("Acceso concedido a " + nombreIngresado);
-
-            let presupuestoMaximo = parseFloat(prompt("¿Cuál es tu presupuesto máximo para este mes?"));
-            let cantidadDeGastos = parseInt(prompt("¿Cuántos gastos deseas registrar hoy?"));
-
-            let resultadoTotal = calcularGastos(cantidadDeGastos);
-
-            console.log("Presupuesto fijado: $" + presupuestoMaximo);
-            console.log("Total gastado: $" + resultadoTotal);
-            alert("El total de tus gastos es: $" + resultadoTotal);
-
-            evaluarPresupuesto(presupuestoMaximo, resultadoTotal);
-
-        } else {
-            alert("Lo sentimos, debes ser mayor de 18 años para utilizar esta calculadora.");
-            console.warn("Intento de acceso denegado por edad.");
-        }
-
-        alert("Gracias por usar la Calculadora de Gastos. ¡Hasta luego!");
-
-    } else {
-        alert("Usuario no registrado. Por favor, ingrese un nombre válido.");
+// ASINCRONISMO Y FETCH 
+// Cargamos las categorías desde un archivo local .json de forma no bloqueante.
+const cargarCategorias = async () => {
+    try {
+        const response = await fetch("./data/categorias.json");
+        const data = await response.json();
+        // Generamos dinámicamente las opciones del select en el DOM.
+        data.forEach(cat => {
+            const option = document.createElement("option");
+            option.value = cat.nombre;
+            option.innerText = cat.nombre;
+            selectCategorias.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error al cargar categorías:", error);
     }
-}
+};
+
+// LÓGICA DE NEGOCIO (Entrada y Procesamiento)
+const agregarGasto = () => {
+    const nombre = document.querySelector("#nombreGasto").value;
+    const precio = document.querySelector("#montoGasto").value;
+    const categoria = selectCategorias.value;
+
+    // Validación de entradas antes de procesar 
+    if (nombre === "" || precio <= 0) {
+        Swal.fire({
+            title: "Datos incompletos",
+            text: "Por favor ingresa una descripción y un monto válido.",
+            icon: "warning"
+        });
+        return;
+    }
+
+    // Instanciamos un nuevo objeto y lo agregamos a la colección (Array). 
+    const nuevoGasto = new Gasto(Date.now(), nombre, precio, categoria);
+    gastos.push(nuevoGasto);
+
+    // Sincronizamos con LocalStorage para persistencia indefinida.
+    localStorage.setItem("misGastos", JSON.stringify(gastos));
+
+    // Feedback al usuario con librería Toastify 
+    Toastify({
+        text: "Gasto guardado",
+        duration: 1500,
+        gravity: "bottom",
+        position: "right",
+        style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+    }).showToast();
+
+    limpiarFormulario();
+    renderizarProyecto();
+};
+
+// MANIPULACIÓN DINÁMICA DEL DOM Y H.O.S 
+const renderizarProyecto = () => {
+    contenedorLista.innerHTML = ""; // Limpieza de vista previa
+
+    // Recorrido de colección usando forEach para generar contenido dinámico. 
+    gastos.forEach(g => {
+        const div = document.createElement("div");
+        div.className = "item-gasto";
+        // Uso de Plantillas Literales (Template Strings) para legibilidad. 
+        div.innerHTML = `
+            <p><strong>${g.nombre}</strong> (${g.categoria}): $${g.precio}</p>
+            <button class="btn-eliminar" onclick="eliminarGasto(${g.id})">Eliminar</button>
+        `;
+        contenedorLista.appendChild(div);
+    });
+
+    actualizarTotales();
+};
+
+const actualizarTotales = () => {
+    // Uso de H.O.S 'reduce' para obtener un único valor (Total).
+    const totalGastado = gastos.reduce((acc, el) => acc + el.precio, 0);
+    const ingreso = parseFloat(document.querySelector("#ingreso").value) || 0;
+    const saldo = ingreso - totalGastado;
+
+    // Salida coherente en el HTML según los datos ingresados.
+    document.querySelector("#resultado").innerHTML = `
+        <div class="resumen-caja">
+            <p><strong>Total de Gastos:</strong> $${totalGastado}</p>
+            <p><strong>Saldo Disponible:</strong> $${saldo}</p>
+        </div>
+    `;
+};
+
+// FUNCIONES DE MANTENIMIENTO
+window.eliminarGasto = (id) => {
+    // Uso del método 'filter' para crear un nuevo array sin el elemento eliminado.
+    gastos = gastos.filter(g => g.id !== id);
+    localStorage.setItem("misGastos", JSON.stringify(gastos));
+    renderizarProyecto();
+};
+
+const limpiarFormulario = () => {
+    document.querySelector("#nombreGasto").value = "";
+    document.querySelector("#montoGasto").value = "";
+};
+
+// EVENTOS E INICIALIZACIÓN 
+btnGuardar.addEventListener("click", agregarGasto);
+document.querySelector("#ingreso").addEventListener("input", actualizarTotales);
+
+// Carga inicial de datos asíncronos y renderizado
+cargarCategorias();
+renderizarProyecto();
