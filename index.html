@@ -3,39 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Gastos - Proyecto Final</title>
+    <title>Calculadora de Gastos - Proyecto Final Refactorizado</title>
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="./styles/estilos.css">
+
+    <script defer src="./js/logic.js"></script>
     <script defer src="./js/main.js"></script>
 </head>
 <body>
-    <header>
-        <h1 class="titulo">Calculadora de Gastos</h1>
+    <header class="titulo">
+        <h1>Calculadora de Gastos Personales</h1>
     </header>
 
     <main class="contenedor">
-        <section class="configuracion">
-            <label for="ingreso">Tu Ingreso Mensual:</label>
-            <input type="number" id="ingreso" placeholder="Ej: 50000">
+        <section class="configuracion-inicial">
+            <label for="ingreso">Monto de Ingreso Mensual:</label>
+            <input type="number" id="ingreso" placeholder="Ej: 800000">
         </section>
 
-        <section class="formulario-gasto">
-            <h3>Registrar Nuevo Gasto</h3>
-            <input type="text" id="nombreGasto" placeholder="Descripción (ej: Alquiler)">
-            <input type="number" id="montoGasto" placeholder="Monto $">
+        <section class="formulario-registro">
+            <h3>Registrar un nuevo egreso</h3>
+            
+            <input type="text" id="nombreGasto" placeholder="Descripción del gasto">
+            <input type="number" id="montoGasto" placeholder="Monto del gasto $">
             
             <label for="categoriaGasto">Categoría:</label>
             <select id="categoriaGasto">
                 </select>
 
-            <button id="botonGuardar" class="contenedor_boton">Agregar Gasto</button>
+            <button id="botonGuardar" class="contenedor_boton">Registrar Gasto</button>
         </section>
 
-        <section class="visualizacion">
-            <h3>Lista de Gastos</h3>
-            <div id="listaGastos"></div>
+        <section class="listado-y-totales">
+            <h3>Historial de Movimientos</h3>
+            <div id="listaGastos">
+                </div>
             
-            <div id="resultado" class="resumen-final">
+            <div id="resultado">
                 </div>
         </section>
     </main>

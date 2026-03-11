@@ -1,1 +1,1 @@
-Se eligió SweetAlert2 para mejorar la estética de los errores y Toastify para dar un feedback rápido y no invasivo al usuario cada vez que registra un gasto, reemplazando los alerts nativos.
+Este proyecto consiste en un simulador interactivo para la gestión de finanzas personales, desarrollado como parte del curso de JavaScript. La aplicación permite registrar ingresos mensuales, categorizar egresos y visualizar el saldo disponible en tiempo real, manteniendo la persistencia de los datos.

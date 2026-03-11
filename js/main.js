@@ -1,135 +1,115 @@
 /**
- * PROYECTO FINAL: CALCULADORA DE GASTOS
- * Objetivo: Simulador interactivo de finanzas personales 
- * Aplicando conceptos de Objetos, DOM, Storage, H.O.S y Fetch.
+ * ARCHIVO PRINCIPAL: Interacción y visualización 
  */
 
-// CLASES Y ABSTRACCIÓN 
-// Definimos el modelo de datos para representar un gasto individual.
-class Gasto {
-    constructor(id, nombre, precio, categoria) {
-        this.id = id;
-        this.nombre = nombre;
-        this.precio = parseFloat(precio);
-        this.categoria = categoria;
-    }
-}
+// Referencias a elementos del DOM (Unidad 7) [cite: 484, 489]
+const inputIngresoMensual = document.querySelector("#ingreso");
+const inputDescripcionGasto = document.querySelector("#nombreGasto");
+const inputMontoGasto = document.querySelector("#montoGasto");
+const selectorCategoriaGasto = document.querySelector("#categoriaGasto");
+const botonRegistrarGasto = document.querySelector("#botonGuardar");
+const contenedorListaDeGastos = document.querySelector("#listaGastos");
+const seccionResumenFinanciero = document.querySelector("#resultado");
 
-// ESTADO Y PERSISTENCIA (Storage + JSON)
-// Recuperamos datos previos del localStorage o inicializamos un array vacío.
-// Usamos JSON.parse para convertir el string almacenado nuevamente en objeto JS.
-let gastos = JSON.parse(localStorage.getItem("misGastos")) || [];
+// Estado inicial de la aplicación
+let listadoGlobalDeGastos = obtenerGastosAlmacenados();
+inputIngresoMensual.value = obtenerIngresoAlmacenado();
 
-// Referencias al DOM para interacción [cite: 533]
-const selectCategorias = document.querySelector("#categoriaGasto");
-const btnGuardar = document.querySelector("#botonGuardar");
-const contenedorLista = document.querySelector("#listaGastos");
+// Función para renderizar usando createElement (Buena práctica de DOM) 
+const mostrarGastosEnPantalla = () => {
+    contenedorListaDeGastos.innerHTML = ""; // Limpiamos el contenedor [cite: 494]
 
-// ASINCRONISMO Y FETCH 
-// Cargamos las categorías desde un archivo local .json de forma no bloqueante.
-const cargarCategorias = async () => {
-    try {
-        const response = await fetch("./data/categorias.json");
-        const data = await response.json();
-        // Generamos dinámicamente las opciones del select en el DOM.
-        data.forEach(cat => {
-            const option = document.createElement("option");
-            option.value = cat.nombre;
-            option.innerText = cat.nombre;
-            selectCategorias.appendChild(option);
+    listadoGlobalDeGastos.forEach((gastoIndividual) => {
+        const divGasto = document.createElement("div"); // Creamos el nodo 
+        divGasto.className = "item-gasto";
+
+        const parrafoInfo = document.createElement("p");
+        // Usamos plantillas literales de la Unidad 7 [cite: 500, 501]
+        parrafoInfo.textContent = `${gastoIndividual.descripcion} (${gastoIndividual.categoria}): $${gastoIndividual.monto}`;
+
+        const botonBorrar = document.createElement("button");
+        botonBorrar.textContent = "Eliminar";
+        botonBorrar.className = "btn-eliminar";
+        
+        // MANEJO DE EVENTOS CORRECTO (Sin 'window' ni eventos en el HTML) 
+        botonBorrar.addEventListener("click", () => {
+            eliminarGastoSeleccionado(gastoIndividual.id);
         });
-    } catch (error) {
-        console.error("Error al cargar categorías:", error);
-    }
-};
 
-// LÓGICA DE NEGOCIO (Entrada y Procesamiento)
-const agregarGasto = () => {
-    const nombre = document.querySelector("#nombreGasto").value;
-    const precio = document.querySelector("#montoGasto").value;
-    const categoria = selectCategorias.value;
-
-    // Validación de entradas antes de procesar 
-    if (nombre === "" || precio <= 0) {
-        Swal.fire({
-            title: "Datos incompletos",
-            text: "Por favor ingresa una descripción y un monto válido.",
-            icon: "warning"
-        });
-        return;
-    }
-
-    // Instanciamos un nuevo objeto y lo agregamos a la colección (Array). 
-    const nuevoGasto = new Gasto(Date.now(), nombre, precio, categoria);
-    gastos.push(nuevoGasto);
-
-    // Sincronizamos con LocalStorage para persistencia indefinida.
-    localStorage.setItem("misGastos", JSON.stringify(gastos));
-
-    // Feedback al usuario con librería Toastify 
-    Toastify({
-        text: "Gasto guardado",
-        duration: 1500,
-        gravity: "bottom",
-        position: "right",
-        style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
-    }).showToast();
-
-    limpiarFormulario();
-    renderizarProyecto();
-};
-
-// MANIPULACIÓN DINÁMICA DEL DOM Y H.O.S 
-const renderizarProyecto = () => {
-    contenedorLista.innerHTML = ""; // Limpieza de vista previa
-
-    // Recorrido de colección usando forEach para generar contenido dinámico. 
-    gastos.forEach(g => {
-        const div = document.createElement("div");
-        div.className = "item-gasto";
-        // Uso de Plantillas Literales (Template Strings) para legibilidad. 
-        div.innerHTML = `
-            <p><strong>${g.nombre}</strong> (${g.categoria}): $${g.precio}</p>
-            <button class="btn-eliminar" onclick="eliminarGasto(${g.id})">Eliminar</button>
-        `;
-        contenedorLista.appendChild(div);
+        divGasto.appendChild(parrafoInfo);
+        divGasto.appendChild(botonBorrar);
+        contenedorListaDeGastos.appendChild(divGasto);
     });
 
-    actualizarTotales();
+    actualizarResumenDeCuentas();
 };
 
-const actualizarTotales = () => {
-    // Uso de H.O.S 'reduce' para obtener un único valor (Total).
-    const totalGastado = gastos.reduce((acc, el) => acc + el.precio, 0);
-    const ingreso = parseFloat(document.querySelector("#ingreso").value) || 0;
-    const saldo = ingreso - totalGastado;
+const actualizarResumenDeCuentas = () => {
+    // Uso de H.O.S 'reduce' para sumar (Unidad 6) [cite: 390, 453]
+    const totalDeEgresos = listadoGlobalDeGastos.reduce((acumulador, gasto) => acumulador + gasto.monto, 0);
+    const presupuestoIngresado = parseFloat(inputIngresoMensual.value) || 0;
+    const saldoFinalDisponible = presupuestoIngresado - totalDeEgresos;
 
-    // Salida coherente en el HTML según los datos ingresados.
-    document.querySelector("#resultado").innerHTML = `
+    seccionResumenFinanciero.innerHTML = `
         <div class="resumen-caja">
-            <p><strong>Total de Gastos:</strong> $${totalGastado}</p>
-            <p><strong>Saldo Disponible:</strong> $${saldo}</p>
+            <p><strong>Total de Gastos:</strong> $${totalDeEgresos}</p>
+            <p><strong>Saldo Neto:</strong> $${saldoFinalDisponible}</p>
         </div>
     `;
 };
 
-// FUNCIONES DE MANTENIMIENTO
-window.eliminarGasto = (id) => {
-    // Uso del método 'filter' para crear un nuevo array sin el elemento eliminado.
-    gastos = gastos.filter(g => g.id !== id);
-    localStorage.setItem("misGastos", JSON.stringify(gastos));
-    renderizarProyecto();
+// Lógica de interacción
+const procesarNuevoGasto = () => {
+    const descripcion = inputDescripcionGasto.value;
+    const monto = inputMontoGasto.value;
+    const categoria = selectorCategoriaGasto.value;
+
+    if (descripcion !== "" && monto > 0) {
+        // Instanciamos el objeto con la clase de logic.js [cite: 694]
+        const nuevoObjetoGasto = new Gasto(Date.now(), descripcion, monto, categoria);
+        listadoGlobalDeGastos.push(nuevoObjetoGasto);
+        
+        guardarGastosEnAlmacenamiento(listadoGlobalDeGastos);
+        mostrarGastosEnPantalla();
+        
+        // Feedback con librerías (Unidad 9) [cite: 638, 745]
+        Toastify({ text: "Gasto registrado correctamente", gravity: "bottom" }).showToast();
+        
+        inputDescripcionGasto.value = "";
+        inputMontoGasto.value = "";
+    }
 };
 
-const limpiarFormulario = () => {
-    document.querySelector("#nombreGasto").value = "";
-    document.querySelector("#montoGasto").value = "";
+const eliminarGastoSeleccionado = (idABuscar) => {
+    // Uso de 'filter' de la Unidad 6 [cite: 389, 709]
+    listadoGlobalDeGastos = listadoGlobalDeGastos.filter((g) => g.id !== idABuscar);
+    guardarGastosEnAlmacenamiento(listadoGlobalDeGastos);
+    mostrarGastosEnPantalla();
 };
 
-// EVENTOS E INICIALIZACIÓN 
-btnGuardar.addEventListener("click", agregarGasto);
-document.querySelector("#ingreso").addEventListener("input", actualizarTotales);
+// Eventos de inicio [cite: 522]
+botonRegistrarGasto.addEventListener("click", procesarNuevoGasto);
+inputIngresoMensual.addEventListener("input", () => {
+    localStorage.setItem("ingreso_mensual_usuario", inputIngresoMensual.value);
+    actualizarResumenDeCuentas();
+});
 
-// Carga inicial de datos asíncronos y renderizado
-cargarCategorias();
-renderizarProyecto();
+// Carga de categorías con Fetch (Unidad 10) [cite: 735, 740]
+const cargarCategoriasDesdeJson = async () => {
+    try {
+        const respuesta = await fetch("./data/categorias.json");
+        const datosCategorias = await respuesta.json();
+        datosCategorias.forEach((cat) => {
+            const opcion = document.createElement("option");
+            opcion.value = cat.nombre;
+            opcion.textContent = cat.nombre;
+            selectorCategoriaGasto.appendChild(opcion);
+        });
+    } catch (error) {
+        console.error("No se pudieron cargar las categorías.");
+    }
+};
+
+// Arranque de la aplicación
+cargarCategoriasDesdeJson();
+mostrarGastosEnPantalla();
